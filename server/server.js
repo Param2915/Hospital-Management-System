@@ -7,6 +7,7 @@ import cloudinary from 'cloudinary';
 import { dbConnection } from './config/dbConnection.js';
 import messageRouter from "./routes/messageRouter.js";
 import userRouter from "./routes/userRouter.js";
+import appointmentRouter from "./routes/appointmentRouter.js";
 import { errorMiddleware } from "./middlewares/errorHandler.js";
 
 const app = express();
@@ -37,6 +38,7 @@ app.use(fileUpload({
 // Routes
 app.use("/api/v1/message", messageRouter);
 app.use("/api/v1/user", userRouter);
+app.use("/api/v1/appointment",appointmentRouter);
 
 // Database connection
 dbConnection();

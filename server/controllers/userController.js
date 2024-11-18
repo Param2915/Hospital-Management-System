@@ -63,9 +63,14 @@ export const adminRegister = catchAsyncError(async(req,res,next)=>{
 })
 
 
-// export const getUserDetails = catchAsyncError(async(req,res,next)=>{
+export const getAllUsers = catchAsyncError(async(req,res,next)=>{
+    const users = await User.find();
+    res.status(200).json({
+        success: true,
+        users,
+    })
+})
 
-// })
 
 
 export const adminLogOut = catchAsyncError(async(req,res,next)=>{
@@ -125,6 +130,8 @@ export const addNewDoctor = catchAsyncError(async(req,res,next)=>{
         doctor
     })
 
-
 })
+
+
+
 // module.exports = { patientRegister, patientLogin };
