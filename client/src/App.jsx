@@ -1,18 +1,21 @@
-import React from 'react'
+import React, {  useEffect ,useState } from 'react';
 import "./App.css"
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom"
 import Home from './pages/Home'
 import Appointment from './pages/Appointment'
 import AboutUs from './pages/AboutUs'
 import Register from './pages/Register'
+import Footer from "./components/Footer";
 import Login from './pages/Login'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import axios from "axios";
 import Navbar from './components/Navbar'
-import { Context } from "./main";
+//import { Context } from "./main";
 
 const App = () => {
-  const { isAuthenticated, setIsAuthenticated, setUser } = useContext(Context);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState(null);
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -42,6 +45,7 @@ const App = () => {
         <Route path='/register' element={<Register/>}/>
         <Route path='/login' element={<Login/>}/>
       </Routes>
+      <Footer/>
       <ToastContainer position='top-center'/>
     </Router>
     </>
