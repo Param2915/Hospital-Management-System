@@ -11,8 +11,7 @@ const Register = () => {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [nic, setNic] = useState("");
-  const [dob, setDob] = useState("");
+  const [age, setAge] = useState("");
   const [gender, setGender] = useState("");
   const [password, setPassword] = useState("");
 
@@ -24,7 +23,7 @@ const Register = () => {
       await axios
         .post(
           "http://localhost:4000/api/v1/user/patient/register",
-          { firstName, lastName, email, phone, nic, dob, gender, password },
+          { firstName, lastName, email, phone, age, gender, password },
           {
             withCredentials: true,
             headers: { "Content-Type": "application/json" },
@@ -38,8 +37,7 @@ const Register = () => {
           setLastName("");
           setEmail("");
           setPhone("");
-          setNic("");
-          setDob("");
+          setAge("");
           setGender("");
           setPassword("");
         });
@@ -58,8 +56,7 @@ const Register = () => {
         <h2>Sign Up</h2>
         <p>Please Sign Up To Continue</p>
         <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat culpa
-          voluptas expedita itaque ex, totam ad quod error?
+        Welcome to our hospital management system! Please create your account to access personalized healthcare services, manage appointments, and view medical records securely. Registration is quick and ensures seamless communication with our medical team for a smooth and efficient healthcare experience. Sign up to start your journey to better health!
         </p>
         <form onSubmit={handleRegistration}>
           <div>
@@ -93,15 +90,9 @@ const Register = () => {
           <div>
             <input
               type="number"
-              placeholder="NIC"
-              value={nic}
-              onChange={(e) => setNic(e.target.value)}
-            />
-            <input
-              type={"date"}
-              placeholder="Date of Birth"
-              value={dob}
-              onChange={(e) => setDob(e.target.value)}
+              placeholder="Age"
+              value={age}
+              onChange={(e) => setAge(e.target.value)}
             />
           </div>
           <div>

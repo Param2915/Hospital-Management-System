@@ -8,15 +8,13 @@ const AppointmentForm = () => {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [nic, setNic] = useState("");
-  const [dob, setDob] = useState("");
+  const [age, setAge] = useState("");
   const [gender, setGender] = useState("");
   const [appointmentDate, setAppointmentDate] = useState("");
   const [department, setDepartment] = useState("Pediatrics");
   const [doctorFirstName, setDoctorFirstName] = useState("");
   const [doctorLastName, setDoctorLastName] = useState("");
-  const [address, setAddress] = useState("");
-  const [hasVisited, setHasVisited] = useState(false);
+  
 
   const departmentsArray = [
     "Pediatrics",
@@ -45,23 +43,20 @@ const AppointmentForm = () => {
   const handleAppointment = async (e) => {
     e.preventDefault();
     try {
-      const hasVisitedBool = Boolean(hasVisited);
       const { data } = await axios.post(
-        "http://localhost:4000/api/v1/appointment/post",
+        "http://localhost:4000/api/v1/appointment/new",
         {
           firstName,
           lastName,
           email,
           phone,
-          nic,
-          dob,
+          age,
           gender,
           appointment_date: appointmentDate,
           department,
           doctor_firstName: doctorFirstName,
           doctor_lastName: doctorLastName,
-          hasVisited: hasVisitedBool,
-          address,
+        
         },
         {
           withCredentials: true,
@@ -69,19 +64,16 @@ const AppointmentForm = () => {
         }
       );
       toast.success(data.message);
-      setFirstName(""),
-        setLastName(""),
-        setEmail(""),
-        setPhone(""),
-        setNic(""),
-        setDob(""),
-        setGender(""),
-        setAppointmentDate(""),
-        setDepartment(""),
-        setDoctorFirstName(""),
-        setDoctorLastName(""),
-        setHasVisited(""),
-        setAddress("");
+      setFirstName("");
+        setLastName("");
+        setEmail("");
+        setPhone("");
+        setAge("");
+        setGender("");
+        setAppointmentDate("");
+        setDepartment("");
+        setDoctorFirstName("");
+        setDoctorLastName("");
     } catch (error) {
       toast.error(error.response.data.message);
     }
@@ -123,15 +115,9 @@ const AppointmentForm = () => {
           <div>
             <input
               type="number"
-              placeholder="NIC"
-              value={nic}
-              onChange={(e) => setNic(e.target.value)}
-            />
-            <input
-              type="date"
-              placeholder="Date of Birth"
-              value={dob}
-              onChange={(e) => setDob(e.target.value)}
+              placeholder="Age"
+              value={age}
+              onChange={(e) => setAge(e.target.value)}
             />
           </div>
           <div>
@@ -186,12 +172,6 @@ const AppointmentForm = () => {
                 ))}
             </select>
           </div>
-          <textarea
-            rows="10"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-            placeholder="Address"
-          />
           <div
             style={{
               gap: "10px",
@@ -199,13 +179,6 @@ const AppointmentForm = () => {
               flexDirection: "row",
             }}
           >
-            <p style={{ marginBottom: 0 }}>Have you visited before?</p>
-            <input
-              type="checkbox"
-              checked={hasVisited}
-              onChange={(e) => setHasVisited(e.target.checked)}
-              style={{ flex: "none", width: "25px" }}
-            />
           </div>
           <button style={{ margin: "0 auto" }}>GET APPOINTMENT</button>
         </form>
