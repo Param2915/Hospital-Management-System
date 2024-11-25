@@ -23,7 +23,7 @@ export const patientRegister = catchAsyncError(async(req,res,next)=>{
 })
 
 
-export const patientLogin = catchAsyncError(async(req,res,next)=>{
+export const login = catchAsyncError(async(req,res,next)=>{
     const {email,password,role}=req.body;
 
     if(!email || !password ||!role){
@@ -139,6 +139,8 @@ export const getAllDoctors = catchAsyncError(async (req, res, next) => {
       doctors,
     });
   });
+
+  
   export const getUserDetails = catchAsyncError(async (req, res, next) => {
     const user = req.user;
     res.status(200).json({

@@ -1,9 +1,13 @@
 import express from "express";
-import { getAppointment } from "../controllers/appointmentController.js";
-import { isPatientAuthenticated } from "../middlewares/jwtAuthMiddleware.js";
+import { getAllAppointments, getAppointment, updateAppointmentStatus } from "../controllers/appointmentController.js";
+import { isAdminAuthenticated, isPatientAuthenticated } from "../middlewares/jwtAuthMiddleware.js";
 
 const router = express.Router();
 
 router.post("/new",isPatientAuthenticated,getAppointment);
+router.get("/getall", isAdminAuthenticated,getAllAppointments);
+router.put("/update", isAdminAuthenticated, updateAppointmentStatus);
+
+
 
 export default router;

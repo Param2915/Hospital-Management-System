@@ -37,3 +37,51 @@ export const getAppointment = catchAsyncError(async(req,res,next)=>{
         message: "Appointment Successfull"
     })
 });
+
+
+export const getAllAppointments = catchAsyncError(async (req, res, next) => {
+    const appointments = await Appointment.find();
+    res.status(200).json({
+      success: true,
+      appointments,
+    });
+  });
+
+
+
+  export const updateAppointmentStatus = catchAsyncError(async (req, res, next) => {
+    const { email, appointmentDate, status } = req.body;
+
+    // Validate required input
+    if (!email) {
+        return next(new ErrorHandler("Email is required to find the appointment!", 400));
+    }
+
+    // Build the update object dynamically based on the provided fields
+    const updateFields = {};
+    if (appointmentDate) updateFields.appointmentDate = appointmentDate;
+    if (status) updateFields.status = status;
+
+    // Find and update the appointment by email
+    const appointment = await Appointment.findOneAndUpdate(
+        { email },
+        updateFields,
+        {
+            new: true,            // Return the updated document
+            runValidators: true,  // Validate the updated fields
+            useFindAndModify: false, // Ensure compatibility with the latest Mongoose
+        }
+    );
+
+    // If no appointment is found, return an error
+    if (!appointment) {
+        return next(new ErrorHandler("No appointment found with this email!", 404));
+    }
+
+    // Send the updated appointment in the response
+    res.status(200).json({
+        success: true,
+        message: "Appointment Updated Successfully",
+        appointment,
+    });
+});
