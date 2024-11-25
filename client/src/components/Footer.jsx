@@ -50,7 +50,7 @@ const Footer = () => {
             <ul>
               <Link to={"/"}>Home</Link>
               <Link to={"/appointment"}>Appointment</Link>
-              <Link to={"/about"}>About</Link>
+              <Link to={"/about"}>About Us</Link>
             </ul>
           </div>
           <div>
@@ -68,11 +68,11 @@ const Footer = () => {
             <h4>Contact</h4>
             <div>
               <FaPhone />
-              <span>999-999-9999</span>
+              <span>+91 99999-99991 </span>
             </div>
             <div>
               <MdEmail />
-              <span>hms@gmail.com</span>
+              <span>hospitalms01@gmail.com</span>
             </div>
             <div>
               <FaLocationArrow />

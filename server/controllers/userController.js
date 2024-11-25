@@ -132,6 +132,13 @@ export const addNewDoctor = catchAsyncError(async(req,res,next)=>{
 
 })
 
+export const getAllDoctors = catchAsyncError(async (req, res, next) => {
+    const doctors = await User.find({ role: "Doctor" });
+    res.status(200).json({
+      success: true,
+      doctors,
+    });
+  });
 
 
 // module.exports = { patientRegister, patientLogin };
