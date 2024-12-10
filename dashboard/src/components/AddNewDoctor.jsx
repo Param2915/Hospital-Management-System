@@ -15,8 +15,6 @@ const AddNewDoctor = () => {
   const [gender, setGender] = useState("");
   const [password, setPassword] = useState("");
   const [doctorDepartment, setDoctorDepartment] = useState("");
-  const [docAvatar, setDocAvatar] = useState("");
-  const [docAvatarPreview, setDocAvatarPreview] = useState("");
 
   const navigateTo = useNavigate();
 
@@ -32,70 +30,55 @@ const AddNewDoctor = () => {
     "ENT",
   ];
 
-  const handleAvatar = (e) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => {
-      setDocAvatarPreview(reader.result);
-      setDocAvatar(file);
-    };
-  };
-
   const handleAddNewDoctor = async (e) => {
     e.preventDefault();
     try {
-      const formData = new FormData();
-      formData.append("firstName", firstName);
-      formData.append("lastName", lastName);
-      formData.append("email", email);
-      formData.append("phone", phone);
-      formData.append("password", password);
-      formData.append("age", age);
-      formData.append("gender", gender);
-      formData.append("doctorDepartment", doctorDepartment);
-      formData.append("docAvatar", docAvatar);
-      await axios
-        .post("http://localhost:4000/api/v1/user/doctor/register", formData, {
+      
+      const response = await axios.post(
+        "http://localhost:4000/api/v1/user/doctor/register",
+        {
+          firstName,
+          lastName,
+          email,
+          phone,
+          age,
+          gender,
+          password,
+          doctorDepart: doctorDepartment,
+        },
+        {
           withCredentials: true,
-          headers: { "Content-Type": "multipart/form-data" },
-        })
-        .then((res) => {
-          toast.success(res.data.message);
-          setIsAuthenticated(true);
-          navigateTo("/");
-          setFirstName("");
-          setLastName("");
-          setEmail("");
-          setPhone("");
-          setAge("");
-          setGender("");
-          setPassword("");
-        });
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      toast.success(response.data.message);
+      setIsAuthenticated(true);
+      navigateTo("/");
+
+      setFirstName("");
+      setLastName("");
+      setEmail("");
+      setPhone("");
+      setAge("");
+      setGender("");
+      setPassword("");
+      setDoctorDepartment("");
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error.response?.data?.message || "An error occurred.");
     }
   };
 
   if (!isAuthenticated) {
     return <Navigate to={"/login"} />;
   }
+
   return (
     <section className="page">
       <section className="container add-doctor-form">
-        <img src="/logo.png" alt="logo" className="logo"/>
+        <img src="/logo.png" alt="logo" className="logo" />
         <h1 className="form-title">REGISTER A NEW DOCTOR</h1>
         <form onSubmit={handleAddNewDoctor}>
           <div className="first-wrapper">
-            <div>
-              <img
-                src={
-                  docAvatarPreview ? `${docAvatarPreview}` : "/docHolder.jpg"
-                }
-                alt="Doctor Avatar"
-              />
-              <input type="file" onChange={handleAvatar} />
-            </div>
             <div>
               <input
                 type="text"
@@ -127,10 +110,7 @@ const AddNewDoctor = () => {
                 value={age}
                 onChange={(e) => setAge(e.target.value)}
               />
-              <select
-                value={gender}
-                onChange={(e) => setGender(e.target.value)}
-              >
+              <select value={gender} onChange={(e) => setGender(e.target.value)}>
                 <option value="">Select Gender</option>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
@@ -166,3 +146,27 @@ const AddNewDoctor = () => {
 };
 
 export default AddNewDoctor;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

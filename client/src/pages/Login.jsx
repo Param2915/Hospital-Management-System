@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useContext, useState } from "react";
 import { toast } from "react-toastify";
-import { Context } from "../main";
+import { Context } from "../main.jsx";
 import { Link, useNavigate, Navigate } from "react-router-dom";
 
 const Login = () => {
@@ -32,7 +32,14 @@ const Login = () => {
           setPassword("");
         });
     } catch (error) {
-      toast.error(error.response.data.message);
+      if (error.response) {
+        toast.error(error.response.data.message || "An error occurred. Please try again.");
+      } else if (error.request) {
+        toast.error("No response from the server. Please check your connection.");
+      } else {
+        toast.error("An error occurred. Please try again later.");
+      }
+      // console.log(error);
     }
   };
 
@@ -46,7 +53,7 @@ const Login = () => {
         <h2>Sign In</h2>
         <p>Please Login To Continue</p>
         <p>
-        Log in to access appointments, medical records, and personalized healthcare services securely. Stay connected with your healthcare team for seamless and efficient care.
+          Log in to access appointments, medical records, and personalized healthcare services securely. Stay connected with your healthcare team for seamless and efficient care.
         </p>
         <form onSubmit={handleLogin}>
           <input

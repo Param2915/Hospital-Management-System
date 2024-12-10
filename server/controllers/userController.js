@@ -5,9 +5,9 @@ import {generateToken} from "../utils/jwtMiddleware.js";
 import cloudinary from "cloudinary";
 
 export const patientRegister = catchAsyncError(async(req,res,next)=>{
-    const {firstName, lastName, email, phone, password, gender, age, role} = req.body;
+    const {firstName, lastName, email, phone, password, gender, age} = req.body;
 
-    if(!firstName || !lastName || !email || !phone || !password || !gender || !age || !role){
+    if(!firstName || !lastName || !email || !phone || !password || !gender || !age){
         return next(new ErrorHandler("Please fill full form! ",400));
     }
 
@@ -16,7 +16,7 @@ export const patientRegister = catchAsyncError(async(req,res,next)=>{
     if(user){
         return next(new ErrorHandler("USER ALREADY REGISTERED! ",400))
     }
-    user = await User.create({firstName, lastName, email, phone, password, gender, age, role});
+    user = await User.create({firstName, lastName, email, phone, password, gender, age, role:"patient"});
 
 
     generateToken(user, "User Registered", 200, res)
@@ -24,9 +24,9 @@ export const patientRegister = catchAsyncError(async(req,res,next)=>{
 
 
 export const login = catchAsyncError(async(req,res,next)=>{
-    const {email,password,role}=req.body;
+    const {email,password}=req.body;
 
-    if(!email || !password ||!role){
+    if(!email || !password ){
         return next(new ErrorHandler("Please provide the details",400))
     }
 
@@ -38,7 +38,7 @@ export const login = catchAsyncError(async(req,res,next)=>{
     if(!passwordMatch) return next(new ErrorHandler("Password did not match"),400);
 
 
-    if(role!== user.role)return next(new ErrorHandler("User with this role not found"),400);
+    // if(role!== user.role)return next(new ErrorHandler("User with this role not found"),400);
 
     generateToken(user, "Login Succesfull", 200, res)
 })
@@ -93,14 +93,6 @@ export const patientLogOut = catchAsyncError(async(req,res,next)=>{
 
 export const addNewDoctor = catchAsyncError(async(req,res,next)=>{
 
-    if(!req.files || Object.keys(req.files).length === 0){
-        return next(new ErrorHandler("Doctor Avatar Required"),400)
-    }
-    const { docAvatar } = req.files;
-
-    const allowedFormats = ["/image/png","/image/jpeg","/image/webp"];
-    if(!allowedFormats) return next(new ErrorHandler("File format not supported"),400);
-
     const { firstName,lastName,age,gender,email,password,phone,doctorDepart } = req.body;
 
     if(!firstName || !lastName || !age || !gender || !email || !password || !phone || !doctorDepart) {
@@ -113,16 +105,7 @@ export const addNewDoctor = catchAsyncError(async(req,res,next)=>{
         return next(new ErrorHandler(`${user.role} already registered with this email! `,400))
     }
 
-    const cloudinaryResponse = await cloudinary.uploader.upload(docAvatar.tempFilePath)
-    if(!cloudinaryResponse || cloudinaryResponse.error){
-        console.error("Cloudinary Error: ",cloudinaryResponse.error || "Unknown Cloudinary Error")
-    }
-
-    const doctor = await User.create({firstName, lastName, email, phone, password, gender, age, doctorDepart,role:"Doctor",
-        docAvatar:{
-            public_id: cloudinaryResponse.public_id,
-            url:cloudinaryResponse.secure_url
-        }});
+    const doctor = await User.create({firstName, lastName, email, phone, password, gender, age, doctorDepart,role:"Doctor"});
 
     res.status(200).json({
         success: true,
@@ -133,11 +116,15 @@ export const addNewDoctor = catchAsyncError(async(req,res,next)=>{
 })
 
 export const getAllDoctors = catchAsyncError(async (req, res, next) => {
-    const doctors = await User.find({ role: "Doctor" });
-    res.status(200).json({
-      success: true,
-      doctors,
-    });
+    try {
+      const doctors = await User.find({ role: "Doctor" });
+      res.status(200).json({
+        success: true,
+        doctors,
+      });
+    } catch (error) {
+      return next(new ErrorHandler("Failed to fetch doctors.", 500));
+    }
   });
 
   
@@ -150,4 +137,4 @@ export const getAllDoctors = catchAsyncError(async (req, res, next) => {
   });
 
 
-// module.exports = { patientRegister, patientLogin };
+  

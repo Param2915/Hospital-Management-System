@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import validator from "validator";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-
+1
 const userSchema = new mongoose.Schema({
     firstName:{
         type: String, 
@@ -46,10 +46,7 @@ const userSchema = new mongoose.Schema({
     doctorDepart:{
         type: String
     },
-    docAvatar: {
-        public_id: String, 
-        url: String
-    },
+
 })
 
  userSchema.pre("save",async function (next) {
